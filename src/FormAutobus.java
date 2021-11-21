@@ -11,8 +11,9 @@ public class FormAutobus extends JPanel{
     private JButton buttonUp;
     private JButton buttonDown;
     private JButton buttonRight;
-    private Autobus bus;
+    private JButton buttonCreateModern;
     private Graphics g;
+    private ITransport bus;
     public FormAutobus() {
         Initialization();
     }
@@ -22,8 +23,16 @@ public class FormAutobus extends JPanel{
             g = MainPanel.getGraphics();
             MainPanel.update(g);
             Random rnd = new Random();
-            bus = new Autobus();
-            bus.Init(rnd.nextInt(200) + 100, rnd.nextInt(500)+1000, Color.red, Color.black, true,  true,true, rnd.nextInt(3)+3);
+            bus = new Autobus(rnd.nextInt(200) + 100, rnd.nextInt(500)+1000, Color.red);
+            //bus.Init(, Color.black, true,  true,true, rnd.nextInt(3)+3);
+            bus.SetPosition(rnd.nextInt(390) + 10, rnd.nextInt(90) + 10, MainPanel.getWidth(), MainPanel.getHeight());
+            Draw();
+        });
+        buttonCreateModern.addActionListener(e->{
+            g = MainPanel.getGraphics();
+            MainPanel.update(g);
+            Random rnd = new Random();
+            bus = new AutobusModern(rnd.nextInt(200) + 100, rnd.nextInt(500)+1000, Color.red, Color.BLUE, true, true, true, rnd.nextInt(3)+3);
             bus.SetPosition(rnd.nextInt(390) + 10, rnd.nextInt(90) + 10, MainPanel.getWidth(), MainPanel.getHeight());
             Draw();
         });
