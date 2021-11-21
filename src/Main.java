@@ -7,6 +7,7 @@ public class Main {
         frame.add(new FormAutobus().getMainPanel());
         frame.setVisible(true);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }
