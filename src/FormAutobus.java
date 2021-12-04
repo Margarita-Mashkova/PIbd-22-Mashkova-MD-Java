@@ -12,25 +12,26 @@ public class FormAutobus extends JPanel{
     private JButton buttonDown;
     private JButton buttonRight;
     private JButton buttonCreateModern;
-    private Graphics g;
+    private DrawBus drawBus;
     private ITransport bus;
+
     public FormAutobus() {
         Initialization();
     }
-    private void Draw(){ bus.DrawTransport(g);}
+    public void SetBus(ITransport bus){
+        this.bus = bus;
+        drawBus.setBus(bus);
+        Draw();
+    }
+    private void Draw(){ drawBus.repaint();}
     private void Initialization() {
         buttonCreate.addActionListener(e -> {
-            g = MainPanel.getGraphics();
-            MainPanel.update(g);
             Random rnd = new Random();
             bus = new Autobus(rnd.nextInt(200) + 100, rnd.nextInt(500)+1000, Color.red);
-            //bus.Init(, Color.black, true,  true,true, rnd.nextInt(3)+3);
             bus.SetPosition(rnd.nextInt(390) + 10, rnd.nextInt(90) + 10, MainPanel.getWidth(), MainPanel.getHeight());
             Draw();
         });
         buttonCreateModern.addActionListener(e->{
-            g = MainPanel.getGraphics();
-            MainPanel.update(g);
             Random rnd = new Random();
             bus = new AutobusModern(rnd.nextInt(200) + 100, rnd.nextInt(500)+1000, Color.red, Color.BLUE, true, true, true, rnd.nextInt(3)+3);
             bus.SetPosition(rnd.nextInt(390) + 10, rnd.nextInt(90) + 10, MainPanel.getWidth(), MainPanel.getHeight());
@@ -41,24 +42,20 @@ public class FormAutobus extends JPanel{
         buttonRight.setName("buttonRight");
         buttonLeft.setName("buttonLeft");
         buttonUp.addActionListener(e -> {
-            g = MainPanel.getGraphics();
-            MainPanel.update(g);
             Move(buttonUp);
+            drawBus.repaint();
         });
         buttonRight.addActionListener(e -> {
-            g = MainPanel.getGraphics();
-            MainPanel.update(g);
             Move(buttonRight);
+            drawBus.repaint();
         });
         buttonDown.addActionListener(e -> {
-            g = MainPanel.getGraphics();
-            MainPanel.update(g);
             Move(buttonDown);
+            drawBus.repaint();
         });
         buttonLeft.addActionListener(e-> {
-            g = MainPanel.getGraphics();
-            MainPanel.update(g);
             Move(buttonLeft);
+            drawBus.repaint();
         });
     }
     public void Move(JButton button) {
@@ -80,4 +77,8 @@ public class FormAutobus extends JPanel{
        Draw();
     }
     public JPanel getMainPanel(){return MainPanel;}
+
+    private void createUIComponents() {
+        drawBus = new DrawBus(bus);
+    }
 }
