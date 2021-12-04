@@ -5,7 +5,6 @@ public class DoorRealEllipse implements DoorInterface {
     public void SetDoorCount(int number) {
         doorCount = DoorCount.getCount(number);
     }
-
     @Override
     public void DrawDoor(Graphics g, Color color, int x, int y) {
         //закраска стандартной отрисовки 2 дверей

@@ -2,11 +2,9 @@ import java.awt.*;
 
 public class DoorRealSquare implements DoorInterface {
     private DoorCount doorCount;
-
     public void SetDoorCount(int number) {
         doorCount = DoorCount.getCount(number);
     }
-
     @Override
     public void DrawDoor(Graphics g, Color color, int x, int y) {
         //закраска стандартной отрисовки 2 дверей
