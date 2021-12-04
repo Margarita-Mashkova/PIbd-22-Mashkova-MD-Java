@@ -2,7 +2,6 @@ import java.awt.*;
 
 public class DoorRealEllipse implements DoorInterface {
     private DoorCount doorCount;
-
     public void SetDoorCount(int number) {
         doorCount = DoorCount.getCount(number);
     }

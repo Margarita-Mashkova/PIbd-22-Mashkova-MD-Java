@@ -6,7 +6,6 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
     private final int pictureHeight;/// Высота окна отрисовки
     private final int _placeSizeWidth = 210 + 230 + 12;/// Размер парковочного места (ширина)
     private final int _placeSizeHeight = 100;/// Размер парковочного места (высота)
-
     /// Конструктор
     public BusStation(int picWidth, int picHeight) {
         int width = picWidth / _placeSizeWidth;
@@ -43,7 +42,6 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
             return null;
         }
     }
-
     // Перегрузка оператора ==
     public boolean equals(BusStation<T,V> busOne, BusStation<T,V> busTwo){
         busOne = new BusStation<>(pictureWidth, pictureHeight);
@@ -68,7 +66,6 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
     public boolean notEquals(BusStation<T,V> busOne, BusStation<T,V> busTwo){
         return !equals(busOne, busTwo);
     }
-
     /// Метод отрисовки автобусов на парковке
     public void Draw(Graphics g) {
         DrawMarking(g);

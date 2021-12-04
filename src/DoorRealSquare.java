@@ -27,9 +27,3 @@ public class DoorRealSquare implements DoorInterface {
         g.fillRect(x + 410, y + 35, 20, 20);
     }
 }
-/*g.setColor(color);
-        g.fillRect(x + 15 + 18 + 17, y + 25, 20, 35);
-        if (doorCount.equals(DoorCount.Three)) return;
-        g.fillRect(x + 220 + 50, y + 25, 20, 35);
-        if (doorCount.equals(DoorCount.Four)) return;
-        g.fillRect(x + 410, y + 25, 20, 35);*/
