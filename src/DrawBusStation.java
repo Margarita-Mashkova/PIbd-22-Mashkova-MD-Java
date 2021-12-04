@@ -13,10 +13,4 @@ public class DrawBusStation extends JPanel {
         }
         super.repaint();
     }
-    /*public BusStation<ITransport, DoorInterface> getBusStation(){
-        return busStation;
-    }
-    public void setBusStation(BusStation<ITransport, DoorInterface> busStation){
-        this.busStation = busStation;
-    }*/
 }
