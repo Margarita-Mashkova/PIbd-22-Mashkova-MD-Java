@@ -1,7 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 public class BusStation<T extends ITransport, V extends DoorInterface> {
-    private final T[] _places; /// Массив объектов, которые храним
+    private final List<T> _places; /// Массив объектов, которые храним
+    private final int _maxCount; /// Максимальное количество мест на парковке автовокзала
     private final int pictureWidth;/// Ширина окна отрисовки
     private final int pictureHeight;/// Высота окна отрисовки
     private final int _placeSizeWidth = 210 + 230 + 12;/// Размер парковочного места (ширина)
@@ -10,34 +13,31 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
     public BusStation(int picWidth, int picHeight) {
         int width = picWidth / _placeSizeWidth;
         int height = picHeight / _placeSizeHeight;
-        _places = (T[]) new ITransport[width * height];
+        _maxCount = width * height;
+        _places = new ArrayList<>();
         pictureWidth = picWidth;
         pictureHeight = picHeight;
     }
     /// Логика действия: на парковку добавляется автобус
     public int add(T bus) {
-        for (int i = 0; i < _places.length; i++) {
-            if (_places[i] == null) {
-                _places[i] = bus;
-                _places[i].SetPosition(10 + i % 3 * _placeSizeWidth, i / 3 * _placeSizeHeight + 15, pictureWidth, pictureHeight);
-                return i;
-            }
+        if (_places.size() == _maxCount)
+        {
+            return -1;
         }
-        return -1;
+        else
+        {
+            _places.add(bus);
+            return _places.size() - 1;
+        }
     }
     /// Логика действия: с парковки забираем автобус
     public T takeAutobus(int index) {
-        if ((index < _places.length) && (index >= 0)) {
-            if(_places[index] != null){
-            T temp = _places[index];
-            _places[index] = null;
+        if ((index < _places.size()) && (index >= 0)) {
+            T temp = _places.get(index);
+            _places.remove(index);
             return temp;
-            }
-            else {
-                JOptionPane.showMessageDialog(null, "Парковочное место пустое!");
-                return null;
-            }
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(null, "Такого места на автовокзале не существует!");
             return null;
         }
@@ -46,17 +46,17 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
     public boolean equals(BusStation<T,V> busOne, BusStation<T,V> busTwo){
         busOne = new BusStation<>(pictureWidth, pictureHeight);
         busTwo = new BusStation<>(pictureWidth, pictureHeight);
-        int busOneCounts = busOne._places.length;
+        int busOneCounts = busOne._places.size();
         int busOneEmpty = 0;
         for(int i = 0; i < busOneCounts; i++){
-            if(busOne._places[i] == null) {
+            if(busOne._places.get(i) == null) {
                 busOneEmpty++;
             }
         }
-        int busTwoCounts = busTwo._places.length;
+        int busTwoCounts = busTwo._places.size();
         int busTwoEmpty = 0;
         for(int i = 0; i < busTwoCounts; i++){
-            if(busTwo._places[i] == null) {
+            if(busTwo._places.get(i) == null) {
                 busTwoEmpty++;
             }
         }
@@ -69,10 +69,9 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
     /// Метод отрисовки автобусов на парковке
     public void Draw(Graphics g) {
         DrawMarking(g);
-        for (int i = 0; i < _places.length; i++) {
-            if (_places[i] != null) {
-                _places[i].DrawTransport(g);
-            }
+        for (int i = 0; i < _places.size(); i++) {
+            _places.get(i).SetPosition(8 + i % 3 * _placeSizeWidth, i / 3 * _placeSizeHeight + 15, pictureWidth, pictureHeight);
+            _places.get(i).DrawTransport(g);
         }
     }
     /// Метод отрисовки разметки парковочных мест
@@ -84,6 +83,13 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
             }
             g.drawLine(5 + i * _placeSizeWidth, 5, 5 + i * _placeSizeWidth, 5 + (pictureHeight / _placeSizeHeight) * _placeSizeHeight);
         }
+    }
+    /// Индексатор для получения элемента из списка
+    public T get(int index) {
+        if ((index > -1) && (index < _places.size())) {
+            return _places.get(index);
+        }
+        return null;
     }
 }
 

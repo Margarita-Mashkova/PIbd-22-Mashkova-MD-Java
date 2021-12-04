@@ -2,11 +2,9 @@ import java.awt.*;
 
 public class DoorRealRect implements DoorInterface {
     private DoorCount doorCount;
-
     public void SetDoorCount(int number) {
         doorCount = DoorCount.getCount(number);
     }
-
     @Override
     public void DrawDoor(Graphics g, Color color, int x, int y) {
         g.setColor(color);
