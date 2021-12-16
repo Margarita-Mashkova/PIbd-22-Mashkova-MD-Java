@@ -65,8 +65,6 @@ public class FormAutobusConfig{
                                 true, checkBoxSecondVagon.isSelected(), checkBoxGarmoshka.isSelected(), doorNumber, doorType);
                         break;
                 }
-                System.out.println(spinnerWeight.getValue());
-                System.out.println(spinnerMaxSpeed.getValue());
             }
         };
         // Форма дверей
