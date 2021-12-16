@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 import java.util.LinkedList;
 
 public class FormBusStation {
@@ -8,7 +7,6 @@ public class FormBusStation {
     private JPanel toolPanel;
     private JPanel paintPanel;
     private JButton buttonSetAutobus;
-    private JButton buttonSetAutobusModern;
     private JTextField textField;
     private JButton buttonTake;
     private DrawBusStation drawBusStation;
@@ -19,45 +17,28 @@ public class FormBusStation {
     private LinkedList<ITransport> linkedList;
     private JButton buttonAddBusStation;
     private JButton buttonTakeToFormAutobus;
-    private  BusStationCollection busStationCollection; //Объект от класса коллекции
+    private BusStationCollection busStationCollection; //Объект от класса коллекции
 
     public FormBusStation() {
+        JFrame frameBusStation = new JFrame("Автовокзал");
+        frameBusStation.setSize(1600, 800);
+        frameBusStation.add(mainPanel);
+        frameBusStation.setVisible(true);
+        frameBusStation.setLocationRelativeTo(null);
+        frameBusStation.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         listAutobus = new DefaultListModel<>();
         listBoxBusStations.setModel(listAutobus);
         linkedList = new LinkedList<>();
         busStationCollection = drawBusStation.getBusStationCollection();
-        /// Обработка нажатия кнопки "Поставить автобус"
+        /// Обработка нажатия кнопки "Добавить автобус"
         buttonSetAutobus.addActionListener(e -> {
             if (listBoxBusStations.getSelectedIndex() > -1) {
-                Color mainColor = JColorChooser.showDialog(null, "Choose a main color", Color.RED);
-                if (mainColor != null) {
-                    ITransport bus = new Autobus(100, 1000, mainColor);
-                    if (busStationCollection.get(listBoxBusStations.getSelectedValue()).add(bus) > -1) {
-                        Draw();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Сначала создайте автовокзал", "Ошибка", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-        /// Обработка нажатия кнопки "Поставить автобус с гармошкой"
-        buttonSetAutobusModern.addActionListener(e -> {
-            if (listBoxBusStations.getSelectedIndex() > -1) {
-                Color mainColor = JColorChooser.showDialog(null, "Choose a main color", Color.RED);
-                if (mainColor != null) {
-                    Color dopColor = JColorChooser.showDialog(null, "Choose a main color", Color.BLUE);
-                    if (dopColor != null) {
-                        Random rnd = new Random();
-                        ITransport bus = new AutobusModern(100, 1000, mainColor, dopColor, true, true, true, rnd.nextInt(3) + 3);
-                        if (busStationCollection.get(listBoxBusStations.getSelectedValue()).add(bus) >= 0) {
-                            Draw();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }
+                JFrame frameConfig = new JFrame("Настройка автобуса");
+                frameConfig.setSize(600, 600);
+                frameConfig.setVisible(true);
+                frameConfig.setLocationRelativeTo(null);
+                FormAutobusConfig formAutobusConfig = new FormAutobusConfig(FormBusStation.this);
+                frameConfig.add(formAutobusConfig.getMainPanel());
             } else {
                 JOptionPane.showMessageDialog(null, "Сначала создайте автовокзал", "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
@@ -74,25 +55,23 @@ public class FormBusStation {
                         JOptionPane.showMessageDialog(null, "Объект с индексом " + textIndex + " добавлен в LinkedList", "Инфо", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-            }
-            else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Сначала создайте автовокзал", "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
         });
         /// Обработка нажатия кнопки "Забрать на вторую форму"
         buttonTakeToFormAutobus.addActionListener(e -> {
-            if(!linkedList.isEmpty()) {
-                JFrame frame = new JFrame("Автобус");
-                frame.setSize(1420, 850);
-                frame.setVisible(true);
-                frame.setLocationRelativeTo(null);
-                FormAutobus form = new FormAutobus();
-                frame.add(form.getMainPanel());
-                form.SetBus(linkedList.get(0));
+            if (!linkedList.isEmpty()) {
+                JFrame frameAutobus = new JFrame("Автобус");
+                frameAutobus.setSize(1420, 850);
+                frameAutobus.setVisible(true);
+                frameAutobus.setLocationRelativeTo(null);
+                FormAutobus formAutobus = new FormAutobus();
+                frameAutobus.add(formAutobus.getMainPanel());
+                formAutobus.SetBus(linkedList.get(0));
                 linkedList.remove(0);
                 Draw();
-            }
-            else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Сначала добавьте объект в LinkedList", "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -141,12 +120,45 @@ public class FormBusStation {
     private void Draw() {
         drawBusStation.repaint();
     }
-
     public JPanel getMainPanel() {
         return mainPanel;
     }
-
+    // Метод, чтобы передать автобус с формы FormAutobusConfig на форму FormBusStation
+    public void setAutobus(ITransport bus) {
+        if (busStationCollection.get(listBoxBusStations.getSelectedValue()).add(bus) > -1) {
+            Draw();
+        } else {
+            JOptionPane.showMessageDialog(null, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void createUIComponents() {
         drawBusStation = new DrawBusStation();
     }
 }
+/*/// Обработка нажатия кнопки "Поставить автобус с гармошкой"
+        buttonSetAutobusModern.addActionListener(e -> {
+            if (listBoxBusStations.getSelectedIndex() > -1) {
+                Color mainColor = JColorChooser.showDialog(null, "Choose a main color", Color.RED);
+                if (mainColor != null) {
+                    Color dopColor = JColorChooser.showDialog(null, "Choose a main color", Color.BLUE);
+                    if (dopColor != null) {
+                        Random rnd = new Random();
+                        ITransport bus = new AutobusModern(100, 1000, mainColor, dopColor, true, true, true, rnd.nextInt(3) + 3);
+                        if (busStationCollection.get(listBoxBusStations.getSelectedValue()).add(bus) >= 0) {
+                            Draw();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Сначала создайте автовокзал", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        });*/
+/*if (bus != null) {
+                    if (busStationCollection.get(listBoxBusStations.getSelectedValue()).add(bus) > -1) {
+                        Draw();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    }
+                } */

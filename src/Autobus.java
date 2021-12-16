@@ -21,6 +21,9 @@ public class Autobus extends Vehicle{
     public void MoveTransport(Directions direction)
     {
         float step = MaxSpeed * 100 / Weight;
+        /*System.out.println((int) step + " = step");
+        System.out.println("Max speed = " + MaxSpeed);
+        System.out.println("Weight = " + Weight);*/
         switch (direction)
         {
             // вправо

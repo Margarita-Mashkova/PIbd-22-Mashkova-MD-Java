@@ -5,7 +5,7 @@ public class AutobusModern extends Autobus{
     public boolean FirstVagon;/// Признак наличия первого вагона
     public boolean SecondVagon; /// Признак наличия второго вагона
     public boolean Garmoshka;/// Признак наличия гармошки
-    private void setDopColor(Color dopColor){ this.DopColor = dopColor; }
+    public void setDopColor(Color dopColor){ this.DopColor = dopColor; }
     public Color getDopColor(){
         return DopColor;
     }
@@ -27,16 +27,16 @@ public class AutobusModern extends Autobus{
     public boolean getGarmoshka(){
         return Garmoshka;
     }
+    public int DoorType;
     private DoorInterface door;
-    protected AutobusModern(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean firstVagon, boolean secondVagon, boolean garmoshka, int doorNumber){
+    protected AutobusModern(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean firstVagon, boolean secondVagon, boolean garmoshka, int doorNumber, int doorType){
         super(maxSpeed, weight, mainColor, 190*2+55, 70);
         DopColor = dopColor;
         FirstVagon = firstVagon;
         SecondVagon = secondVagon;
         Garmoshka = garmoshka;
-        Random random = new Random();
-        int changes = random.nextInt(3)+1;
-        switch (changes) {
+        DoorType = doorType;
+        switch (DoorType) {
             case 1:
                 door = new DoorRealRect();
                 break;

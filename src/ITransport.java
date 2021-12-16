@@ -6,4 +6,6 @@ public interface ITransport {
     void MoveTransport(Directions direction);
     // Отрисовка
     void DrawTransport(Graphics g);
+    // Установка основного цвета
+    void setMainColor(Color color);
 }
