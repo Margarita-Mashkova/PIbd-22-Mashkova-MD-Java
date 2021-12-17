@@ -91,5 +91,8 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
         }
         return null;
     }
+    public void clear() {
+        _places.clear();
+    }
 }
 

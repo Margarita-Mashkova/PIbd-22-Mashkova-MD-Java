@@ -1,9 +1,11 @@
 import java.awt.*;
+import java.util.Random;
 public class AutobusModern extends Autobus{
     public Color DopColor;/// Дополнительный цвет
     public boolean FirstVagon;/// Признак наличия первого вагона
     public boolean SecondVagon; /// Признак наличия второго вагона
     public boolean Garmoshka;/// Признак наличия гармошки
+    // Смена дополнительного цвета
     public void setDopColor(Color dopColor){ this.DopColor = dopColor; }
     public Color getDopColor(){
         return DopColor;
@@ -27,6 +29,7 @@ public class AutobusModern extends Autobus{
         return Garmoshka;
     }
     public int DoorType;
+    public int DoorNumber;
     private DoorInterface door;
     protected AutobusModern(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean firstVagon, boolean secondVagon, boolean garmoshka, int doorNumber, int doorType){
         super(maxSpeed, weight, mainColor, 190*2+55, 70);
@@ -35,6 +38,7 @@ public class AutobusModern extends Autobus{
         SecondVagon = secondVagon;
         Garmoshka = garmoshka;
         DoorType = doorType;
+        DoorNumber = doorNumber;
         switch (DoorType) {
             case 1:
                 door = new DoorRealRect();
@@ -47,6 +51,36 @@ public class AutobusModern extends Autobus{
                 break;
         }
         door.SetDoorCount(doorNumber);
+    }
+    /// Конструктор для загрузки с файла
+    public AutobusModern(String info)
+    {
+        super(info);
+        String[] strs = info.split(separator);
+        if (strs.length == 9)
+        {
+            MaxSpeed = Integer.parseInt(strs[0]);
+            Weight = Float.parseFloat(strs[1]);
+            MainColor = Color.decode(strs[2]);
+            DopColor = Color.decode(strs[3]);
+            FirstVagon = Boolean.parseBoolean(strs[4]);
+            SecondVagon = Boolean.parseBoolean(strs[5]);
+            Garmoshka = Boolean.parseBoolean(strs[6]);
+            DoorNumber = Integer.parseInt(strs[7]);
+            DoorType = Integer.parseInt(strs[8]);
+            switch (DoorType) {
+                case 1:
+                    door = new DoorRealRect();
+                    break;
+                case 2:
+                    door = new DoorRealEllipse();
+                    break;
+                case 3:
+                    door = new DoorRealSquare();
+                    break;
+            }
+            door.SetDoorCount(DoorNumber);
+        }
     }
     /// Отрисовка автомобиля
     @Override
@@ -89,5 +123,10 @@ public class AutobusModern extends Autobus{
             g.drawOval(_startPosX + 190 - 20 - 25 + 190 + lengthG, _startPosY + 60 - 10, 25, 25);//переднее
         }
         door.DrawDoor(g, DopColor, _startPosX,_startPosY);
+    }
+    @Override
+    public String toString()
+    {
+        return super.toString()+separator+DopColor.getRGB()+separator+FirstVagon+separator+SecondVagon+separator+Garmoshka+separator+DoorNumber+separator+DoorType;
     }
 }

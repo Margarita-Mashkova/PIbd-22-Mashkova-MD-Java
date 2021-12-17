@@ -1,7 +1,10 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.LinkedList;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FormBusStation {
+    JFrame frameBusStation;
     private JPanel mainPanel;
     private JPanel toolPanel;
     private JPanel paintPanel;
@@ -16,15 +19,17 @@ public class FormBusStation {
     private LinkedList<ITransport> linkedList;
     private JButton buttonAddBusStation;
     private JButton buttonTakeToFormAutobus;
+    private JMenuBar menuBar;
+    private JMenu menuFile;
+    private JMenu menuBusStation;
+    private JMenuItem saveFile;
+    private JMenuItem loadFile;
+    private JMenuItem saveBusStaion;
+    private JMenuItem loadBusStaion;
     private BusStationCollection busStationCollection; //Объект от класса коллекции
 
     public FormBusStation() {
-        JFrame frameBusStation = new JFrame("Автовокзал");
-        frameBusStation.setSize(1600, 800);
-        frameBusStation.add(mainPanel);
-        frameBusStation.setVisible(true);
-        frameBusStation.setLocationRelativeTo(null);
-        frameBusStation.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        CreateGUI();
         listAutobus = new DefaultListModel<>();
         listBoxBusStations.setModel(listAutobus);
         linkedList = new LinkedList<>();
@@ -115,13 +120,6 @@ public class FormBusStation {
             listBoxBusStations.setSelectedIndex(index);
         }
     }
-    /// Метод отрисовки парковки
-    private void Draw() {
-        drawBusStation.repaint();
-    }
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
     // Метод, чтобы передать автобус с формы FormAutobusConfig на форму FormBusStation
     public void setAutobus(ITransport bus) {
         if (busStationCollection.get(listBoxBusStations.getSelectedValue()).add(bus) > -1) {
@@ -130,7 +128,106 @@ public class FormBusStation {
             JOptionPane.showMessageDialog(null, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
         }
     }
-    private void createUIComponents() {
-        drawBusStation = new DrawBusStation();
+    public void CreateGUI(){
+        frameBusStation = new JFrame("Автовокзал");
+        frameBusStation.setSize(1600, 800);
+        frameBusStation.add(mainPanel);
+        frameBusStation.setVisible(true);
+        frameBusStation.setLocationRelativeTo(null);
+        frameBusStation.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        menuBar = new JMenuBar();
+        menuFile = new JMenu("Файл");
+        menuBar.add(menuFile);
+        saveFile = new JMenuItem("Сохранить файл");
+        saveFile.addActionListener(e -> {
+            saveFile();
+        });
+        loadFile = new JMenuItem("Загрузить файл");
+        loadFile.addActionListener(e -> {
+            loadFile();
+        });
+        menuFile.add(saveFile);
+        menuFile.add(loadFile);
+        menuBusStation = new JMenu("Вокзал");
+        saveBusStaion = new JMenuItem("Сохранить вокзал");
+        saveBusStaion.addActionListener(e -> {
+            saveBusStaion();
+        });
+        loadBusStaion = new JMenuItem("Загрузить вокзал");
+        loadBusStaion.addActionListener(e -> {
+            loadBusStaion();
+        });
+        menuBusStation.add(saveBusStaion);
+        menuBusStation.add(loadBusStaion);
+        menuBar.add(menuBusStation);
+        frameBusStation.add(menuBar, BorderLayout.NORTH);
+    }
+    /// Метод обработки нажатия пункта меню "Сохранить файл"
+    public void saveFile(){
+        JFileChooser fileSaveDialog = new JFileChooser();
+        fileSaveDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileSaveDialog.showSaveDialog(frameBusStation);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (busStationCollection.SaveData(fileSaveDialog.getSelectedFile().getPath())) {
+                JOptionPane.showMessageDialog(frameBusStation, "Файл успешно сохранен", "Результат", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frameBusStation, "Файл не сохранен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    /// Метод обработки нажатия пункта меню "Загрузить файл"
+    public void loadFile(){
+        JFileChooser fileOpenDialog = new JFileChooser();
+        fileOpenDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileOpenDialog.showOpenDialog(frameBusStation);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (busStationCollection.LoadData(fileOpenDialog.getSelectedFile().getPath())) {
+                JOptionPane.showMessageDialog(frameBusStation, "Файл успешно загружен", "Результат", JOptionPane.INFORMATION_MESSAGE);
+                reloadLevels();
+                Draw();
+            } else {
+                JOptionPane.showMessageDialog(frameBusStation, "Файл не загружен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    /// Метод обработки нажатия пункта меню "Сохранить автовокзал"
+    public void saveBusStaion(){
+        JFileChooser fileSaveDialog = new JFileChooser();
+        fileSaveDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        if (listBoxBusStations.getSelectedValue() == null) {
+            JOptionPane.showMessageDialog(frameBusStation, "Выберите стоянку", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int result = fileSaveDialog.showSaveDialog(frameBusStation);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (busStationCollection.saveBusStation(fileSaveDialog.getSelectedFile().getPath(), listBoxBusStations.getSelectedValue())) {
+                JOptionPane.showMessageDialog(frameBusStation, "Файл успешно сохранен", "Результат", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frameBusStation, "Файл не сохранен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    /// Метод обработки нажатия пункта меню "Загрузить автовокзал"
+    public void loadBusStaion(){
+        JFileChooser fileOpenDialog = new JFileChooser();
+        fileOpenDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileOpenDialog.showOpenDialog(frameBusStation);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (busStationCollection.loadBusStation(fileOpenDialog.getSelectedFile().getPath())) {
+                JOptionPane.showMessageDialog(frameBusStation, "Файл успешно загружен", "Результат", JOptionPane.INFORMATION_MESSAGE);
+                reloadLevels();
+                Draw();
+            } else {
+                JOptionPane.showMessageDialog(frameBusStation, "Файл не загружен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    /// Метод отрисовки парковки
+    private void Draw() {
+        drawBusStation.repaint();
+    }
+    private void createUIComponents() { drawBusStation = new DrawBusStation();}
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 }

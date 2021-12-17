@@ -1,55 +1,70 @@
 import java.awt.*;
 
-public class Autobus extends Vehicle {
+public class Autobus extends Vehicle{
     private int carWidth = 190;/// Ширина отрисовки автобуса
     private int carHeight = 70;/// Высота отрисовки автобуса
-
-    public Autobus(int maxSpeed, float weight, Color mainColor) {
+    protected final String separator = ";"; /// Разделитель для записи информации по объекту в файл
+    public Autobus(int maxSpeed, float weight, Color mainColor)
+    {
         MaxSpeed = maxSpeed;
         Weight = weight;
         MainColor = mainColor;
     }
-
-    protected Autobus(int maxSpeed, float weight, Color mainColor, int carWidth, int carHeight) {
+    protected Autobus(int maxSpeed, float weight, Color mainColor, int carWidth, int carHeight){
         MaxSpeed = maxSpeed;
         Weight = weight;
         MainColor = mainColor;
         this.carWidth = carWidth;
         this.carHeight = carHeight;
     }
-
+    /// Конструктор для загрузки с файла
+    public Autobus(String info)
+    {
+        String[] strs = info.split(separator);
+        if (strs.length == 3)
+        {
+            MaxSpeed = Integer.parseInt(strs[0]);
+            Weight = Float.parseFloat(strs[1]);
+            MainColor = Color.decode(strs[2]);
+        }
+    }
     //Изменение направления пермещения
     @Override
-    public void MoveTransport(Directions direction) {
+    public void MoveTransport(Directions direction)
+    {
         float step = MaxSpeed * 100 / Weight;
-        switch (direction) {
+        switch (direction)
+        {
             // вправо
             case Right:
-                if (_startPosX + step < _pictureWidth - carWidth) {
+                if (_startPosX + step < _pictureWidth - carWidth)
+                {
                     _startPosX += step;
                 }
                 break;
             //влево
             case Left:
-                if (_startPosX - step > 0) {
+                if (_startPosX - step > 0)
+                {
                     _startPosX -= step;
                 }
                 break;
             //вверх
             case Up:
-                if (_startPosY - step > 0) {
+                if (_startPosY - step > 0)
+                {
                     _startPosY -= step;
                 }
                 break;
             //вниз
             case Down:
-                if (_startPosY + step < _pictureHeight - carHeight) {
+                if (_startPosY + step < _pictureHeight - carHeight)
+                {
                     _startPosY += step;
                 }
                 break;
         }
     }
-
     //Отрисовка автомобиля
     @Override
     public void DrawTransport(Graphics gr) {
@@ -75,5 +90,10 @@ public class Autobus extends Vehicle {
         g.fillOval(_startPosX + 190 - 20 - 25, _startPosY + 50, 25, 25);//заливка
         g.setColor(MainColor);
         g.drawOval(_startPosX + 190 - 20 - 25, _startPosY + 50, 25, 25);//переднее
+    }
+    @Override
+    public String toString()
+    {
+        return MaxSpeed+separator+Weight+separator+MainColor.getRGB();
     }
 }
