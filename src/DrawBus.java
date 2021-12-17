@@ -16,4 +16,5 @@ public class DrawBus extends JPanel {
     public void setBus(ITransport bus){
         this.bus = bus;
     }
+    public ITransport getAutobus() {return bus;}
 }

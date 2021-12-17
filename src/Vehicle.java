@@ -27,6 +27,5 @@ public abstract class Vehicle implements ITransport{
     public int getMaxSpeed(){ return MaxSpeed; }
     private void setWeight(float weight){ this.Weight = weight; }
     public float getWeight(){ return Weight; }
-    private void setMainColor(Color mainColor){ this.MainColor = mainColor; }
-    public Color getMainColor(){ return MainColor; }
+    public void setMainColor(Color mainColor){ this.MainColor = mainColor; }
 }
