@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.util.LinkedList;
 
 public class FormBusStation {
@@ -135,30 +134,3 @@ public class FormBusStation {
         drawBusStation = new DrawBusStation();
     }
 }
-/*/// Обработка нажатия кнопки "Поставить автобус с гармошкой"
-        buttonSetAutobusModern.addActionListener(e -> {
-            if (listBoxBusStations.getSelectedIndex() > -1) {
-                Color mainColor = JColorChooser.showDialog(null, "Choose a main color", Color.RED);
-                if (mainColor != null) {
-                    Color dopColor = JColorChooser.showDialog(null, "Choose a main color", Color.BLUE);
-                    if (dopColor != null) {
-                        Random rnd = new Random();
-                        ITransport bus = new AutobusModern(100, 1000, mainColor, dopColor, true, true, true, rnd.nextInt(3) + 3);
-                        if (busStationCollection.get(listBoxBusStations.getSelectedValue()).add(bus) >= 0) {
-                            Draw();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Сначала создайте автовокзал", "Ошибка", JOptionPane.ERROR_MESSAGE);
-            }
-        });*/
-/*if (bus != null) {
-                    if (busStationCollection.get(listBoxBusStations.getSelectedValue()).add(bus) > -1) {
-                        Draw();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Автовокзал переполнен", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                    }
-                } */

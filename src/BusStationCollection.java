@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map;
 import java.util.Set;
+
 public class BusStationCollection {
     private final Map<String, BusStation<ITransport, DoorInterface>> busStationStages; /// Словарь (хранилище) с автовокзалами
     private final int pictureWidth;  /// Ширина окна отрисовки

@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.util.Random;
 public class AutobusModern extends Autobus{
     public Color DopColor;/// Дополнительный цвет
     public boolean FirstVagon;/// Признак наличия первого вагона

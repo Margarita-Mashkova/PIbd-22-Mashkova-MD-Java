@@ -222,8 +222,3 @@ public class FormAutobusConfig{
         drawBus = new DrawBus(bus);
     }
 }
-
-//Double dSpeed=(Double)spinnerMaxSpeed.getValue();
-//int speed=dSpeed.intValue();
-//Double dWeight= (Double) spinnerWeight.getValue();
-//float weight = dWeight.floatValue();

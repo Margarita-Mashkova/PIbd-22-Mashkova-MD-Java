@@ -1,61 +1,55 @@
 import java.awt.*;
 
-public class Autobus extends Vehicle{
+public class Autobus extends Vehicle {
     private int carWidth = 190;/// Ширина отрисовки автобуса
     private int carHeight = 70;/// Высота отрисовки автобуса
-    public Autobus(int maxSpeed, float weight, Color mainColor)
-    {
+
+    public Autobus(int maxSpeed, float weight, Color mainColor) {
         MaxSpeed = maxSpeed;
         Weight = weight;
         MainColor = mainColor;
     }
-    protected Autobus(int maxSpeed, float weight, Color mainColor, int carWidth, int carHeight){
+
+    protected Autobus(int maxSpeed, float weight, Color mainColor, int carWidth, int carHeight) {
         MaxSpeed = maxSpeed;
         Weight = weight;
         MainColor = mainColor;
         this.carWidth = carWidth;
         this.carHeight = carHeight;
     }
+
     //Изменение направления пермещения
     @Override
-    public void MoveTransport(Directions direction)
-    {
+    public void MoveTransport(Directions direction) {
         float step = MaxSpeed * 100 / Weight;
-        /*System.out.println((int) step + " = step");
-        System.out.println("Max speed = " + MaxSpeed);
-        System.out.println("Weight = " + Weight);*/
-        switch (direction)
-        {
+        switch (direction) {
             // вправо
             case Right:
-                if (_startPosX + step < _pictureWidth - carWidth)
-                {
+                if (_startPosX + step < _pictureWidth - carWidth) {
                     _startPosX += step;
                 }
                 break;
             //влево
             case Left:
-                if (_startPosX - step > 0)
-                {
+                if (_startPosX - step > 0) {
                     _startPosX -= step;
                 }
                 break;
             //вверх
             case Up:
-                if (_startPosY - step > 0)
-                {
+                if (_startPosY - step > 0) {
                     _startPosY -= step;
                 }
                 break;
             //вниз
             case Down:
-                if (_startPosY + step < _pictureHeight - carHeight)
-                {
+                if (_startPosY + step < _pictureHeight - carHeight) {
                     _startPosY += step;
                 }
                 break;
         }
     }
+
     //Отрисовка автомобиля
     @Override
     public void DrawTransport(Graphics gr) {

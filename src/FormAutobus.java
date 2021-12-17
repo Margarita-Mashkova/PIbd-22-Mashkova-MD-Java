@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 
 public class FormAutobus extends JPanel {
     private JPanel MainPanel;
