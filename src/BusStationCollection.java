@@ -1,11 +1,8 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Scanner;
-import java.util.Map;
+import com.sun.media.sound.InvalidDataException;
+
+import java.io.*;
+import java.security.KeyException;
+import java.util.*;
 
 public class BusStationCollection {
     private final Map<String, BusStation<ITransport, DoorInterface>> busStationStages; /// Словарь (хранилище) с автовокзалами
@@ -56,7 +53,7 @@ public class BusStationCollection {
     }
 
     /// Сохранение информации по автомбусам на автовокзалах в файл
-    public boolean SaveData(String filename) {
+    public void SaveData(String filename) throws IOException{
         if (!filename.contains(".txt")) {
             filename += ".txt";
         }
@@ -77,16 +74,13 @@ public class BusStationCollection {
                     fileWriter.write(bus.toString() + '\n');
                 }
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
-        return true;
     }
 
     /// Загрузка нформации по автобусам на автовокзалах из файла
-    public boolean LoadData(String filename) {
+    public void LoadData(String filename) throws IOException, BusStationOverflowException{
         if (!(new File(filename).exists())) {
-            return false;
+            throw new FileNotFoundException("Файл " + filename + " не найден");
         }
         try (FileReader fileReader = new FileReader(filename)) {
             Scanner sc = new Scanner(fileReader);
@@ -95,7 +89,7 @@ public class BusStationCollection {
                 busStationStages.clear();
             } else {
                 //если нет такой записи, то это не те данные
-                return false;
+                throw new InvalidPropertiesFormatException("Неверный формат файла");
             }
             ITransport bus = null;
             String key = "";
@@ -113,24 +107,20 @@ public class BusStationCollection {
                     else if (line.contains("AutobusModern")) {
                         bus = new AutobusModern(line.split(separator)[1]);
                     }
-                    if (busStationStages.get(key).add(bus) <= -1) {
-                        return false;
+                    if (busStationStages.get(key).add(bus) == -1) {
+                        throw new InvalidDataException(); /////////////////!!!!!!!!!!!!!!!!!!
                     }
                 }
             }
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return true;
     }
     // Сохранение отдельного автовокзала
-    public boolean saveBusStation(String filename, String key) {
+    public void saveBusStation(String filename, String key) throws IOException, KeyException{
         if (!filename.contains(".txt")) {
             filename += ".txt";
         }
         if (!busStationStages.containsKey(key)) {
-            return false;
+            throw new KeyException();
         }
         try (FileWriter fileWriter = new FileWriter(filename, false)) {
             if (busStationStages.containsKey(key))
@@ -144,13 +134,10 @@ public class BusStationCollection {
                 }
                 fileWriter.write(bus.toString() + '\n');
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
     // Загрузка отдельного автовокзала
-    public boolean loadBusStation(String filename) {
+    public void loadBusStation(String filename) throws IOException, BusStationOverflowException{
         try (FileReader fileReader = new FileReader(filename)) {
             Scanner scanner = new Scanner(fileReader);
             String key;
@@ -164,7 +151,7 @@ public class BusStationCollection {
                     busStationStages.put(key, new BusStation<ITransport, DoorInterface>(pictureWidth, pictureHeight));
                 }
             } else {
-                return false;
+                throw new InvalidPropertiesFormatException("Неверный формат файла");
             }
             ITransport bus = null;
             while (scanner.hasNextLine()) {
@@ -176,13 +163,10 @@ public class BusStationCollection {
                         bus = new AutobusModern(line.split(separator)[1]);
                     }
                     if (busStationStages.get(key).add(bus) == -1) {
-                        return false;
+                        throw new InvalidDataException(); /////////////////!!!!!!!!!!!!!!!!!!
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
 }

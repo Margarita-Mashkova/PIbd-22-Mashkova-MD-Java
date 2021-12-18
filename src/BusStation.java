@@ -19,10 +19,10 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
         pictureHeight = picHeight;
     }
     /// Логика действия: на парковку добавляется автобус
-    public int add(T bus) {
+    public int add(T bus) throws BusStationOverflowException {
         if (_places.size() == _maxCount)
         {
-            return -1;
+            throw new BusStationOverflowException();
         }
         else
         {
@@ -31,15 +31,14 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
         }
     }
     /// Логика действия: с парковки забираем автобус
-    public T takeAutobus(int index) {
+    public T takeAutobus(int index) throws BusStationNotFoundException {
         if ((index < _places.size()) && (index >= 0)) {
             T temp = _places.get(index);
             _places.remove(index);
             return temp;
         }
         else {
-            JOptionPane.showMessageDialog(null, "Такого места на автовокзале не существует!");
-            return null;
+           throw new BusStationNotFoundException(index);
         }
     }
     // Перегрузка оператора ==
