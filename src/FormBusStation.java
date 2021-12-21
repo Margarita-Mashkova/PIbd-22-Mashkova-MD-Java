@@ -38,7 +38,7 @@ public class FormBusStation {
     public FormBusStation() {
         CreateGUI();
         logger = LogManager.getLogger(FormBusStation.class);
-        //PropertyConfigurator.configure("src/log4.xml");
+        //PropertyConfigurator.configure("src/log4j.properties");
         listAutobus = new DefaultListModel<>();
         listBoxBusStations.setModel(listAutobus);
         linkedList = new LinkedList<>();
