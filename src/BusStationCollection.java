@@ -1,5 +1,4 @@
 import com.sun.media.sound.InvalidDataException;
-
 import java.io.*;
 import java.security.KeyException;
 import java.util.*;
@@ -108,7 +107,7 @@ public class BusStationCollection {
                         bus = new AutobusModern(line.split(separator)[1]);
                     }
                     if (busStationStages.get(key).add(bus) == -1) {
-                        throw new InvalidDataException(); /////////////////!!!!!!!!!!!!!!!!!!
+                        throw new InvalidDataException();
                     }
                 }
             }
@@ -163,7 +162,7 @@ public class BusStationCollection {
                         bus = new AutobusModern(line.split(separator)[1]);
                     }
                     if (busStationStages.get(key).add(bus) == -1) {
-                        throw new InvalidDataException(); /////////////////!!!!!!!!!!!!!!!!!!
+                        throw new InvalidDataException();
                     }
                 }
             }
