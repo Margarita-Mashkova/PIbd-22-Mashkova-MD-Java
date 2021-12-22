@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
-public class BusStation<T extends ITransport, V extends DoorInterface> {
+public class BusStation<T extends ITransport, V extends DoorInterface> implements Iterable<Vehicle>{
     private final List<T> _places; /// Массив объектов, которые храним
     private final int _maxCount; /// Максимальное количество мест на парковке автовокзала
     private final int pictureWidth;/// Ширина окна отрисовки
@@ -19,10 +21,14 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
         pictureHeight = picHeight;
     }
     /// Логика действия: на парковку добавляется автобус
-    public int add(T bus) throws BusStationOverflowException {
+    public int add(T bus) throws BusStationOverflowException, BusStationAlreadyHaveException {
         if (_places.size() == _maxCount)
         {
             throw new BusStationOverflowException();
+        }
+        System.out.println(bus);
+        if(_places.contains(bus)){
+            throw new BusStationAlreadyHaveException();
         }
         else
         {
@@ -92,6 +98,44 @@ public class BusStation<T extends ITransport, V extends DoorInterface> {
     }
     public void clear() {
         _places.clear();
+    }
+
+    public void sort() {
+        _places.sort((Comparator<? super T>) new AutobusComparer());
+    }
+    @Override
+    public Iterator<Vehicle> iterator() {
+        Iterator<Vehicle> iterator = new Iterator<Vehicle>() {
+
+            private int _currentIndex = -1;
+
+            @Override
+            public boolean hasNext() {
+                if ((_currentIndex + 1) >= _places.size())
+                {
+                    _currentIndex = -1;
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            public Vehicle next() {
+                return (Vehicle) _places.get(_currentIndex++);
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        return iterator;
+    }
+    //Метод, чтобы выводить свойства автобусов через forEach (можно добавить в метод add)
+    public void getProperties() {
+        for (ITransport buses : _places){
+            System.out.println("Свойства автобуса: " + buses.getClass().getSimpleName() + " " + buses);
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 import java.awt.*;
+import java.util.Iterator;
 
-public class Autobus extends Vehicle{
+public class Autobus extends Vehicle implements Comparable<Autobus>,Iterable<Object>{
     private int carWidth = 190;/// Ширина отрисовки автобуса
     private int carHeight = 70;/// Высота отрисовки автобуса
     protected final String separator = ";"; /// Разделитель для записи информации по объекту в файл
@@ -95,5 +96,90 @@ public class Autobus extends Vehicle{
     public String toString()
     {
         return MaxSpeed+separator+Weight+separator+MainColor.getRGB();
+    }
+
+    @Override
+    public int compareTo(Autobus other) {
+        if (other == null) {
+            return 1;
+        }
+        if (MaxSpeed != other.MaxSpeed) {
+            return Integer.valueOf(MaxSpeed).compareTo(other.MaxSpeed);
+        }
+        if (Weight != other.Weight) {
+            return Float.valueOf(Weight).compareTo(other.Weight);
+        }
+        if (MainColor.getRGB() != other.MainColor.getRGB()) {
+            return Integer.valueOf(MainColor.getRGB()).compareTo(other.MainColor.getRGB());
+        }
+        return 0;
+    }
+    /// Метод интерфейса для класса Autobus
+    public boolean equals(Autobus other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        if(!getClass().getSimpleName().equals(other.getClass().getSimpleName()))
+        {
+            return false;
+        }
+        if (MaxSpeed != other.MaxSpeed)
+        {
+            return false;
+        }
+        if (Weight != other.Weight)
+        {
+            return false;
+        }
+        if (MainColor.getRGB() != other.MainColor.getRGB())
+        {
+            return false;
+        }
+        return true;
+    }
+    /// Перегрузка метода от object
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (!(obj instanceof Autobus))
+        {
+            return false;
+        }
+        else {
+            Autobus autobus = (Autobus) obj;
+            return equals(autobus);
+        }
+    }
+    @Override
+    public Iterator<Object> iterator() {
+        Iterator<Object> iterator = new Iterator<Object>() {
+
+            private int current = -1;
+            private int allProperties = 2;
+
+            @Override
+            public boolean hasNext() {
+                current++;
+                return current<=allProperties;
+            }
+
+            @Override
+            public String next() {
+                if(current==0){
+                    return Integer.toString(MaxSpeed);
+                }
+                else if(current==1){
+                    return Float.toString(Weight);
+                }
+                return Integer.toString(MainColor.getRGB());
+            }
+        };
+        return iterator;
     }
 }

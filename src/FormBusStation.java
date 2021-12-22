@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.security.KeyException;
 import java.util.InvalidPropertiesFormatException;
@@ -25,6 +27,7 @@ public class FormBusStation {
     private LinkedList<ITransport> linkedList;
     private JButton buttonAddBusStation;
     private JButton buttonTakeToFormAutobus;
+    private JButton buttonSort;
     private JMenuBar menuBar;
     private JMenu menuFile;
     private JMenu menuBusStation;
@@ -38,11 +41,11 @@ public class FormBusStation {
     public FormBusStation() {
         CreateGUI();
         logger = LogManager.getLogger(FormBusStation.class);
+        //PropertyConfigurator.configure("src/log4.xml");
         listAutobus = new DefaultListModel<>();
         listBoxBusStations.setModel(listAutobus);
         linkedList = new LinkedList<>();
         busStationCollection = drawBusStation.getBusStationCollection();
-
         /// Обработка нажатия кнопки "Добавить автобус"
         buttonSetAutobus.addActionListener(e -> {
             if (listBoxBusStations.getSelectedIndex() > -1) {
@@ -123,6 +126,18 @@ public class FormBusStation {
             logger.info("Перешли на автовокзал " + listBoxBusStations.getSelectedValue());
             Draw();
         });
+        /// Обработка нажатия кнопки "Сортировать"
+        buttonSort.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (listBoxBusStations.getSelectedIndex() > -1)
+                {
+                    busStationCollection.get(listBoxBusStations.getSelectedValue()).sort();
+                    Draw();
+                    logger.info("Отсортировали автобусы на вокзале");
+                }
+            }
+        });
     }
     //Заполнение listBox
     private void reloadLevels() {
@@ -149,6 +164,11 @@ public class FormBusStation {
         } catch (BusStationOverflowException ex) {
             logger.warn("Попытались поставить автобус в переполненный автовокзал");
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Переполнение", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (BusStationAlreadyHaveException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Дублирование");
+            logger.warn("Попытались добавить существующий автобус");
         }
         catch (Exception ex){
             logger.fatal("Неизвестная неудачная попытка поставить автобус на автовокзал" + ex.getMessage());
