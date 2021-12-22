@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%5p ||%x %m (%d{HH:mm:ss - dd.MM.yyyy})%n"/>
+        </layout>
+    </appender>
+    <appender name="file" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="D://2 курс//ТП Java гит//laba1//logs.txt"/>
+        <param name="Append" value="false" />
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="1MB"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%5p ||%x %m (%d{HH:mm:ss - dd.MM.yyyy})%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO" />
+            <param name="LevelMax" value="ERROR" />
+        </filter>
+    </appender>
+    <appender name="email" class="org.apache.log4j.net.SMTPAppender">
+        <param name="BufferSize" value="1" />
+        <param name="To" value="margoshamashkova2002@gmail.com" />
+        <param name="From" value="mashkova.margaritka@yandex.ru" />
+        <param name="Subject" value="SomeApplication on SomeServer12" />
+        <param name="SMTPHost" value="smtp.yandex.ru" />
+        <param name="SMTPUsername" value="mashkova.margaritka@yandex.ru" />
+        <param name="SMTPPassword" value="*******" />
+        <param name="SMTPPort" value="587" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{dd.MM.yyyy HH:mm:ss,SSS} %c [%p]: %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="fatal" />
+        </filter>
+    </appender>
+    <root>
+        <level value="ALL"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+        <appender-ref ref="email"/>
+    </root>
+</log4j:configuration>
