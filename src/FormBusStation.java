@@ -41,11 +41,11 @@ public class FormBusStation {
     public FormBusStation() {
         CreateGUI();
         logger = LogManager.getLogger(FormBusStation.class);
-        //PropertyConfigurator.configure("src/log4.xml");
         listAutobus = new DefaultListModel<>();
         listBoxBusStations.setModel(listAutobus);
         linkedList = new LinkedList<>();
         busStationCollection = drawBusStation.getBusStationCollection();
+
         /// Обработка нажатия кнопки "Добавить автобус"
         buttonSetAutobus.addActionListener(e -> {
             if (listBoxBusStations.getSelectedIndex() > -1) {
