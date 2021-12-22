@@ -26,7 +26,6 @@ public class BusStation<T extends ITransport, V extends DoorInterface> implement
         {
             throw new BusStationOverflowException();
         }
-        System.out.println(bus);
         if(_places.contains(bus)){
             throw new BusStationAlreadyHaveException();
         }
