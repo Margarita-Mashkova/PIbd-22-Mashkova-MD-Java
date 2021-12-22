@@ -61,8 +61,7 @@ public class BusStationCollection {
             for (Map.Entry<String, BusStation<ITransport, DoorInterface>> level : busStationStages.entrySet()) {
                 //Начинаем парковку
                 fileWriter.write("BusStation" + separator + level.getKey() + '\n');
-                ITransport bus;
-                for (int i = 0; (bus = level.getValue().get(i)) != null; i++) {
+                for (ITransport bus : level.getValue()) {
                     //Записываем тип машины
                     if (bus.getClass().getSimpleName().equals("Autobus")) {
                         fileWriter.write("Autobus" + separator);
@@ -77,7 +76,7 @@ public class BusStationCollection {
     }
 
     /// Загрузка нформации по автобусам на автовокзалах из файла
-    public void LoadData(String filename) throws IOException, BusStationOverflowException{
+    public void LoadData(String filename) throws IOException, BusStationOverflowException, BusStationAlreadyHaveException{
         if (!(new File(filename).exists())) {
             throw new FileNotFoundException("Файл " + filename + " не найден");
         }
@@ -124,8 +123,8 @@ public class BusStationCollection {
         try (FileWriter fileWriter = new FileWriter(filename, false)) {
             if (busStationStages.containsKey(key))
                 fileWriter.write("BusStation" + separator + key + '\n');
-            ITransport bus;
-            for (int i = 0; (bus = busStationStages.get(key).get(i)) != null; i++) {
+            //ITransport bus;
+            for (ITransport bus : busStationStages.get(key)) {
                 if (bus.getClass().getSimpleName().equals("Autobus")) {
                     fileWriter.write("Autobus" + separator);
                 } else if (bus.getClass().getSimpleName().equals("AutobusModern")) {
@@ -136,7 +135,7 @@ public class BusStationCollection {
         }
     }
     // Загрузка отдельного автовокзала
-    public void loadBusStation(String filename) throws IOException, BusStationOverflowException{
+    public void loadBusStation(String filename) throws IOException, BusStationOverflowException, BusStationAlreadyHaveException{
         try (FileReader fileReader = new FileReader(filename)) {
             Scanner scanner = new Scanner(fileReader);
             String key;

@@ -1,4 +1,7 @@
+import com.sun.org.apache.xpath.internal.operations.Equals;
+
 import java.awt.*;
+import java.util.Iterator;
 import java.util.Random;
 public class AutobusModern extends Autobus{
     public Color DopColor;/// Дополнительный цвет
@@ -30,7 +33,7 @@ public class AutobusModern extends Autobus{
     }
     public int DoorType;
     public int DoorNumber;
-    private DoorInterface door;
+    public DoorInterface door;
     protected AutobusModern(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean firstVagon, boolean secondVagon, boolean garmoshka, int doorNumber, int doorType){
         super(maxSpeed, weight, mainColor, 190*2+55, 70);
         DopColor = dopColor;
@@ -128,5 +131,119 @@ public class AutobusModern extends Autobus{
     public String toString()
     {
         return super.toString()+separator+DopColor.getRGB()+separator+FirstVagon+separator+SecondVagon+separator+Garmoshka+separator+DoorNumber+separator+DoorType;
+    }
+
+    public int compareTo(AutobusModern other) {
+        if (compareTo((Autobus) other) != 0) {
+            return 1;
+        }
+        if (DopColor.getRGB() != other.DopColor.getRGB()) {
+            return Integer.valueOf(DopColor.getRGB()).compareTo(other.DopColor.getRGB());
+        }
+        if (Garmoshka != other.Garmoshka) {
+            return Boolean.valueOf(Garmoshka).compareTo(other.Garmoshka);
+        }
+        if (SecondVagon != other.SecondVagon) {
+            return Boolean.valueOf(SecondVagon).compareTo(other.SecondVagon);
+        }
+        if (DoorType != other.DoorType) {
+            return Integer.valueOf(DoorType).compareTo(other.DoorType);
+        }
+        if (DoorNumber != other.DoorNumber) {
+            return Integer.valueOf(DoorNumber).compareTo(other.DoorNumber);
+        }
+        return 0;
+    }
+    /// Метод интерфейса для класса AutobusModern
+    public boolean equals(AutobusModern other)
+    {
+        if (!equals((Autobus)other))
+        {
+            return false;
+        }
+        if (DopColor.getRGB() != other.DopColor.getRGB())
+        {
+            return false;
+        }
+        if (SecondVagon != other.SecondVagon)
+        {
+            return false;
+        }
+        if (Garmoshka != other.Garmoshka)
+        {
+            return false;
+        }
+        if (DoorType!=other.DoorType){
+            return false;
+        }
+        if (DoorNumber!=other.DoorNumber){
+            return false;
+        }
+        return true;
+    }
+    /// Перегрузка метода от object
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (!(obj instanceof AutobusModern))
+        {
+            return false;
+        }
+        else
+        {
+            AutobusModern autobusModern = (AutobusModern) obj;
+            return equals(autobusModern);
+        }
+    }
+    @Override
+    public Iterator<Object> iterator() {
+        Iterator<Object> it = new Iterator<Object>() {
+
+            private int current = -1;
+            private int allProperties = 9;
+
+            @Override
+            public boolean hasNext() {
+                current++;
+                if(door!=null)
+                    return current <= allProperties;
+                else return current <= allProperties-1;
+            }
+
+            @Override
+            public String next() {
+                if(current==0){
+                    return Integer.toString(MaxSpeed);
+                }
+                else if(current==1){
+                    return Float.toString(Weight);
+                }
+                else if(current==2) {
+                    return Integer.toString(MainColor.getRGB());
+                }
+                else if(current==3){
+                    return Integer.toString(DopColor.getRGB());
+                }
+                else if(current==4){
+                    return Boolean.toString(FirstVagon);
+                }
+                else if(current==6){
+                    return Boolean.toString(SecondVagon);
+                }
+                else if(current==7) {
+                    return Boolean.toString(Garmoshka);
+                }
+                else if(current==8) {
+                    return Integer.toString(DoorNumber);
+                }
+                else {return Integer.toString(DoorType);}
+            }
+
+        };
+        return it;
     }
 }
